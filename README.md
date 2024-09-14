@@ -13,19 +13,28 @@ Ensure that you have python 3.9 or later installed. This project uses pipenv to 
 pip install -r requirements.txt
 ```
 
-
-<h2>Usage</h2>
-To run the script, use the following command:
+If you would prefer to have the requirements installed in a virtual environment, you can use the following commands:
 
 ```
-python run.py --file <path to file containing genes to process> --num_genes_to_process <number of genes to process> --threshold <correlation threshold> --num_workers <number of workers for multiprocessing>
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+<h2>Usage</h2>
+
+Assuming you are at the root of the directory -- to run the script, use the following command:
+
+```
+python src/run.py --file <path to file containing genes to process> --num_genes_to_process <number of genes to process> --threshold <correlation threshold> --num_workers <number of workers for multiprocessing>
 ```
 
 Example:
 
 ```
-python run.py --file data/test_genes.xlsx --num_genes_to_process 10 --threshold 0.5 --num_workers 10
+python src/run.py --file data/test_genes.xlsx --num_genes_to_process 10 --threshold 0.5 --num_workers 10
 ```
+
 
 Note: The file containing the genes is the only required argument. The remaining arguments have default values and can be left at their defaults. (threshold is None, num_workers = 10, num_genes_to_process = 50)
 
