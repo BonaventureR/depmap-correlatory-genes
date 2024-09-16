@@ -23,15 +23,15 @@ if __name__ == "__main__":
     file, gene_col = args.file, args.gene_col
     num_genes_to_process, threshold, num_workers = args.num_genes_to_process, args.threshold, args.num_workers
     if file.endswith('.xlsx'):
-        data = pd.read_excel(args.file)
+        data = pd.read_excel(file)
     elif file.endswith('.csv'):
-        data = pd.read_csv(args.file)
+        data = pd.read_csv(file)
     else:
         raise ValueError('File must be an Excel or CSV file')
 
     if gene_col not in data.columns:
         raise ValueError(
-            f'Gene column {args.gene_col} not found in file, try passing --gene_col with the column name pertaining to the gene')
+            f'Gene column {gene_col} not found in file, try passing --gene_col with the column name pertaining to the gene')
 
     genes = data[gene_col].tolist()
     depmap_obj = DepmapGeneData()
