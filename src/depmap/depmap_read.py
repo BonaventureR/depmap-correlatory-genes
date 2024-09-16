@@ -11,11 +11,12 @@ import time as time
 
 SAVE_OUTPUT_FILE = os.path.join(os.getcwd(), 'output')
 
+
 class DepmapGeneData:
     def __init__(self):
         self.depmap_gene_url = 'https://depmap.org/portal/gene/{gene}/top_correlations?dataset_name=Chronos_Combined'
 
-    def get_depmap_gene_data(self, genes: list[str] = None, num_genes_to_process: int = 50, threshold: float = None) -> str:
+    def get_depmap_gene_data(self, genes: list[str] = None, num_genes_to_process: int = 50, threshold: float = None, num_workers: int = 10) -> str:
         """Gets correlatory genes for a given set of genes according to depmap coessentiality charts.
 
         Parameters
@@ -52,15 +53,17 @@ class DepmapGeneData:
                     gene, coessentiality_df, remaining_genes, threshold)
                 return gene, {'gene': gene, 'coessentiality_genes': gene_hits}
 
-            with ThreadPoolExecutor(max_workers=min(10, len(genes))) as executor:
+            with ThreadPoolExecutor(max_workers=min(1, num_workers)) as executor:
                 future_to_gene = {executor.submit(
                     process_gene, gene, i): gene for i, gene in enumerate(genes)}
                 for future in as_completed(future_to_gene):
                     gene, result = future.result()
                     output[gene] = result
 
-            # Convert the ordered dictionary to a DataFrame
-            file_name = os.path.join(SAVE_OUTPUT_FILE, f'depmap_gene_correlation_data_{time.time()}.csv')
+            if not os.path.exists(SAVE_OUTPUT_FILE):
+                os.makedirs(SAVE_OUTPUT_FILE)
+            file_name = os.path.join(
+                SAVE_OUTPUT_FILE, f'depmap_gene_correlation_data_{time.time()}.csv')
             output_df = pd.DataFrame(list(output.values()))
             output_df.to_csv(file_name, index=False)
 
@@ -133,7 +136,7 @@ class DepmapGeneData:
             raise e
 
 
-#if __name__ == "__main__":
-    #depmap_obj = DepmapGeneData()
-    #genes = ['XPR1', 'KIDINS220', 'SOX17', 'XIRP2']
-    #depmap_obj.get_depmap_gene_data(genes, threshold=0.5)
+# if __name__ == "__main__":
+    # depmap_obj = DepmapGeneData()
+    # genes = ['XPR1', 'KIDINS220', 'SOX17', 'XIRP2']
+    # depmap_obj.get_depmap_gene_data(genes, threshold=0.5)
