@@ -25,6 +25,8 @@ pip install -r requirements.txt
 
 Assuming you are at the root of the directory -- to run the script, use the following command:
 
+It helps to move the file containing the genes to process to the root directory `gene_correlation/` and then right click on the file in the file explorer and select "Copy as path" and then run the following command:
+
 ```
 python src/run.py --file <path to file containing genes to process> --num_genes_to_process <number of genes to process> --threshold <correlation threshold> --num_workers <number of workers for multiprocessing>
 ```
@@ -34,7 +36,6 @@ Example:
 ```
 python src/run.py --file data/test_genes.xlsx --num_genes_to_process 10 --threshold 0.5 --num_workers 10
 ```
-
 
 Note: The file containing the genes is the only required argument. The remaining arguments have default values and can be left at their defaults. (threshold is None, num_workers = 10, num_genes_to_process = 50)
 
